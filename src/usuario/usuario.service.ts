@@ -1,24 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
+import { UpdateUsuarioDto } from './DTOs/updateUsuarioDto';
+import { CreateUsuarioDto } from './DTOs/createUsuarioDto';
+import * as bcrypt from 'bcrypt'; 
 
 @Injectable()
 export class UsuarioService {
+  private readonly repo: Repository<Usuario>
+  async actualizar(id: number, dto: UpdateUsuarioDto): Promise<Usuario> {
+    const usuario = await this.usuarioRepo.findOneBy({ id });
+    if (!usuario) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+  
+    Object.assign(usuario, dto);
+    return this.usuarioRepo.save(usuario);
+  }
   constructor(
     @InjectRepository(Usuario)
     private usuarioRepo: Repository<Usuario>,
   ) {}
 
-  async crear(usuarioData: Partial<Usuario>): Promise<Usuario> {
-    const nuevoUsuario = this.usuarioRepo.create({
-      ...usuarioData,
+  async crear(dto: CreateUsuarioDto): Promise<Usuario> {
+    
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(dto.password, saltRounds);
+
+    
+    const usuario = this.usuarioRepo.create({
+      ...dto,
+      password: hash,           
       fechaCreacion: new Date(),
     });
-    return this.usuarioRepo.save(nuevoUsuario);
+
+    
+    return this.usuarioRepo.save(usuario);
   }
 
   async obtenerTodos(): Promise<Usuario[]> {
     return this.usuarioRepo.find();
   }
-}
+
+  async obtenerUno(id: number): Promise<Usuario> {
+    const usuario = await this.usuarioRepo.findOne({ where: { id } });
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con id ${id} no existe`);
+    }
+    return usuario!; 
+  }  
+
+  
+
+
+
+  }
+

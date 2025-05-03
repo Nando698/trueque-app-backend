@@ -2,6 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 import { Oferta } from '../../oferta/entities/oferta.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';
+import { Exclude } from 'class-transformer';
 
 export enum RolUsuario {
   ADMIN = 'ADMIN',
@@ -24,6 +25,7 @@ export class Usuario {
   @Column()
   correo: string;
 
+  @Exclude()
   @Column()
   password: string;
 
