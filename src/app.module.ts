@@ -4,26 +4,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Oferta } from './oferta/entities/oferta.entity';
 import { Categoria } from './categoria/entities/categoria.entity';
-import { Etiqueta } from './etiqueta/entities/etiqueta.entity';
 import { Favorito } from './favorito/entities/favorito.entity';
-import { OfertaEtiqueta } from './ofertaEtiqueta/entities/ofertaEtiqueta.entity';
 import { FavoritoService } from './favorito/favorito.service';
 import { FavoritoController } from './favorito/favorito.controller';
-import { EtiquetaService } from './etiqueta/etiqueta.service';
-import { EtiquetaController } from './etiqueta/etiqueta.controller';
 import { CategoriaService } from './categoria/categoria.service';
 import { CategoriaController } from './categoria/categoria.controller';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuarioModule } from './usuario/usuario.module';
-import { OfertaEtiquetaModule } from './ofertaEtiqueta/oferta-etiqueta.module';
+import { OfertaModule } from './oferta/oferta.module';
+import { OfertaService } from './oferta/oferta.service';
+import { OfertaController } from './oferta/oferta.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, UsuarioModule, OfertaEtiquetaModule],
+      imports: [ConfigModule, UsuarioModule, OfertaModule],
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({
@@ -33,7 +31,7 @@ import { OfertaEtiquetaModule } from './ofertaEtiqueta/oferta-etiqueta.module';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Usuario, Oferta, Categoria, Etiqueta, Favorito, OfertaEtiqueta],
+        entities: [Usuario, Oferta, Categoria, Favorito],
         synchronize: true, // ⚠️ Solo en desarrollo
       }),
     }),
@@ -42,14 +40,12 @@ import { OfertaEtiquetaModule } from './ofertaEtiqueta/oferta-etiqueta.module';
       Usuario,
       Oferta,
       Categoria,
-      Etiqueta,
-      Favorito,
-      OfertaEtiqueta,
+      Favorito
     ]),
 
-    OfertaEtiquetaModule,
+    
   ],
-  providers: [AppService, FavoritoService, EtiquetaService, CategoriaService],
-  controllers: [AppController, FavoritoController, EtiquetaController, CategoriaController],
+  providers: [AppService, FavoritoService,  CategoriaService, OfertaService],
+  controllers: [AppController, FavoritoController, CategoriaController, OfertaController],
 })
 export class AppModule {}

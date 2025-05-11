@@ -1,21 +1,28 @@
-
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Usuario } from '../../usuario/entities/usuario.entity';
-import { Oferta } from '../../oferta/entities/oferta.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  Column,
+  Unique,
+} from 'typeorm'
+import { Usuario } from 'src/usuario/entities/usuario.entity'
+import { Oferta } from 'src/oferta/entities/oferta.entity'
 
 @Entity('favoritos')
+@Unique(['usuario', 'oferta']) // evita duplicados
 export class Favorito {
-  @PrimaryColumn({ name: 'usuario_id' })
-  usuarioId: number;
+  @PrimaryGeneratedColumn()
+  id: number
 
-  @PrimaryColumn({ name: 'oferta_id' })
-  ofertaId: number;
-
-  @ManyToOne(() => Usuario, usuario => usuario.favoritos)
+  @ManyToOne(() => Usuario, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'usuario_id' })
-  usuario: Usuario;
+  usuario: Usuario
 
-  @ManyToOne(() => Oferta, oferta => oferta.favoritos)
+  @ManyToOne(() => Oferta, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'oferta_id' })
-  oferta: Oferta;
+  oferta: Oferta
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  fecha_agregado: Date
 }

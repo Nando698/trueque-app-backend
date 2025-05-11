@@ -5,13 +5,13 @@ import {
   } from 'typeorm';
   import { Usuario } from '../../usuario/entities/usuario.entity';
   import { Categoria } from '../../categoria/entities/categoria.entity';
-  import { Etiqueta } from '../../etiqueta/entities/etiqueta.entity';
   import { Favorito } from '../../favorito/entities/favorito.entity';
-  import { OfertaEtiqueta } from 'src/ofertaEtiqueta/entities/ofertaEtiqueta.entity';
+  
   
   export enum EstadoOferta {
     ACTIVA = 'ACTIVA',
     FINALIZADA = 'FINALIZADA',
+    PAUSADA = 'PAUSADA',
   }
   
   @Entity('ofertas')
@@ -22,6 +22,9 @@ import {
     @ManyToOne(() => Usuario, usuario => usuario.ofertas)
     @JoinColumn({ name: 'usuario_id' })
     usuario: Usuario;
+
+    @Column({ nullable: true })
+    imagen: string
   
     @Column()
     titulo: string;
@@ -39,8 +42,7 @@ import {
     @Column({ type: 'enum', enum: EstadoOferta })
     estado: EstadoOferta;
   
-    @OneToMany(() => OfertaEtiqueta, oe => oe.oferta)
-ofertaEtiquetas: OfertaEtiqueta[];
+    
   
     @OneToMany(() => Favorito, fav => fav.oferta)
     favoritos: Favorito[];

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Usuario } from './entities/usuario.entity';
+import { Usuario, EstadoUsuario } from './entities/usuario.entity';
 import { UpdateUsuarioDto } from './DTOs/updateUsuarioDto';
 import { CreateUsuarioDto } from './DTOs/createUsuarioDto';
 import * as bcrypt from 'bcrypt'; 
@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsuarioService {
   private readonly repo: Repository<Usuario>
+  
   async actualizar(id: number, dto: UpdateUsuarioDto): Promise<Usuario> {
     const usuario = await this.usuarioRepo.findOneBy({ id });
     if (!usuario) {
@@ -52,8 +53,16 @@ export class UsuarioService {
   }  
 
   
+  async remove(id: number) {
+    await this.usuarioRepo.update(id, { estado: EstadoUsuario.INACTIVO })
+    return { mensaje: `Usuario ${id} marcado como INACTIVO` }
+  }
 
 
+  async activar(id: number) {
+    await this.usuarioRepo.update(id, { estado: EstadoUsuario.ACTIVO })
+    return { mensaje: `Usuario ${id} reactivado` }
+  }
 
   }
 
