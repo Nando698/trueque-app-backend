@@ -13,7 +13,7 @@ export class OfertaController {
   }
 
   @Get()
-findAll(
+  findAll(
   @Query('categoria_id') categoriaId?: string,
   @Query('usuario_id') usuarioId?: string,
 ) {
@@ -24,7 +24,7 @@ findAll(
   if (categoriaId) {
     return this.ofertaService.buscarPorCategoria(+categoriaId)
   }
-
+  console.log('buscando ofertas');
   return this.ofertaService.findAll()
 }
 

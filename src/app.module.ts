@@ -15,6 +15,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { OfertaModule } from './oferta/oferta.module';
 import { OfertaService } from './oferta/oferta.service';
 import { OfertaController } from './oferta/oferta.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -42,6 +43,8 @@ import { OfertaController } from './oferta/oferta.controller';
       Categoria,
       Favorito
     ]),
+
+    AuthModule,
 
     
   ],

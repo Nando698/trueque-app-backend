@@ -36,7 +36,8 @@ export class UsuarioService {
       fechaCreacion: new Date(),
     });
 
-    
+    console.log("usuario creado: ", usuario);
+
     return this.usuarioRepo.save(usuario);
   }
 
@@ -64,5 +65,9 @@ export class UsuarioService {
     return { mensaje: `Usuario ${id} reactivado` }
   }
 
+  async findByEmail(correo: string): Promise<Usuario | null> {
+    return this.usuarioRepo.findOne({ where: { correo } });  
+
   }
+}
 
