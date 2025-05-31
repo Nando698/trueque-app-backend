@@ -23,15 +23,17 @@ import {
     @JoinColumn({ name: 'usuario_id' })
     usuario: Usuario;
 
-    @Column({ nullable: true })
-    imagen: string
+    
   
     @Column()
     titulo: string;
   
     @Column({ type: 'text' })
     descripcion: string;
-  
+    
+   @Column({ type: 'text', array: true, nullable: true })
+    imagenes: string[];
+
     @ManyToOne(() => Categoria, categoria => categoria.ofertas)
     @JoinColumn({ name: 'categoria' })
     categoria: Categoria;

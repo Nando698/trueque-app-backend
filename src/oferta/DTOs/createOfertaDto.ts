@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, IsEnum, IsInt, IsOptional, IsArray, ArrayNotEmpty } from 'class-validator'
 import { EstadoOferta } from '../entities/oferta.entity'
+import { Type } from 'class-transformer'
 
 export class CreateOfertaDto {
   @IsNotEmpty()
@@ -10,6 +11,7 @@ export class CreateOfertaDto {
   @IsString()
   descripcion: string
 
+  @Type(()=> Number)
   @IsNotEmpty()
   @IsInt()
   categoria_id: number
@@ -18,13 +20,15 @@ export class CreateOfertaDto {
   @IsEnum(EstadoOferta)
   estado: EstadoOferta
 
+   @Type(()=> Number)
   @IsNotEmpty()
   @IsInt()
   usuario_id: number
 
   @IsOptional()
-  @IsString()
-  imagen?: string
+  @IsArray()
+  @IsString({ each: true })
+  imagenes?: string[];
 
  
 }

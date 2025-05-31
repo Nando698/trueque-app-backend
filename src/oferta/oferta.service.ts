@@ -24,17 +24,22 @@ export class OfertaService {
   async create(dto: CreateOfertaDto) {
     const usuario = await this.usuarioRepo.findOneBy({ id: dto.usuario_id })
     const categoria = await this.categoriaRepo.findOneBy({ id: dto.categoria_id })
-    
+    console.log("DTO:::", dto)
 
     if (!usuario || !categoria) throw new NotFoundException('Usuario o categoría no encontrados')
 
-    const nuevaOferta = this.ofertaRepo.create({
+     
+    
+      const nuevaOferta = this.ofertaRepo.create({
       titulo: dto.titulo,
       descripcion: dto.descripcion,
       estado: dto.estado,
       usuario,
       categoria,    
       fechaPublicacion: new Date().toISOString().split('T')[0],
+      imagenes: dto.imagenes
+      
+      
     })
 
     return this.ofertaRepo.save(nuevaOferta)

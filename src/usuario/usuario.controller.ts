@@ -29,6 +29,7 @@ export class UsuarioController {
 
   @Get() // Obtener todos los usuarios
   obtenerTodos(): Promise<Usuario[]> {
+    
     return this.usuarioService.obtenerTodos();
   }
 

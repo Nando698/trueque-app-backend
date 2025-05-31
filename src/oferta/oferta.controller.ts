@@ -1,17 +1,46 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseInterceptors, UploadedFile, UploadedFiles } from '@nestjs/common'
 import { OfertaService } from './oferta.service'
 import { CreateOfertaDto } from './DTOs/createOfertaDto'
 import { UpdateOfertaDto } from './DTOs/updateOfertaDto'
+import { FilesInterceptor } from '@nestjs/platform-express'
+import { diskStorage } from 'multer'
+import { extname, join } from 'path'
 
 @Controller('ofertas')
 export class OfertaController {
   constructor(private readonly ofertaService: OfertaService) {}
 
   @Post()
-  create(@Body() dto: CreateOfertaDto) {
-    return this.ofertaService.create(dto)
+  @UseInterceptors(FilesInterceptor('imagenes',3,{
+    storage: diskStorage({
+      destination:  join(process.cwd(), 'src/upload'),
+      filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, uniqueName + extname(file.originalname));
+      },
+    }),
+  }))
+  create(
+    @UploadedFiles() files: Express.Multer.File[],
+    
+    @Body() dto: CreateOfertaDto) {
+     
+      const imagenes = files.map(file => `http://localhost:3001/src/upload/${file.filename}`)
+
+      const dtoConImagenes: CreateOfertaDto = {
+    ...dto,
+    imagenes
+  };
+    
+    
+      return this.ofertaService.create(dtoConImagenes)
   }
 
+  
+  
+  
+  
+  
   @Get()
   findAll(
   @Query('categoria_id') categoriaId?: string,
