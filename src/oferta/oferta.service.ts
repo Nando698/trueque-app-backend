@@ -105,7 +105,27 @@ export class OfertaService {
   }
 
 
-  
+  async buscarPersonalizado(filtro: { categoriaId?: number; texto?: string }) {
+  const query = this.ofertaRepo.createQueryBuilder('oferta')
+    .leftJoinAndSelect('oferta.usuario', 'usuario')
+    .leftJoinAndSelect('oferta.categoria', 'categoria');
+
+  if (filtro.categoriaId) {
+    
+    
+    query.andWhere('oferta.categoria = :categoriaId', { categoriaId: filtro.categoriaId });
+  }
+
+  if (filtro.texto) {
+    
+    query.andWhere(
+      '(LOWER(oferta.titulo) LIKE :texto OR LOWER(oferta.descripcion) LIKE :texto)',
+      { texto: `%${filtro.texto}%` },
+    );
+  }
+
+  return query.getMany();
+}
 
 
 

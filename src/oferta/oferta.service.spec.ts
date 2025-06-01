@@ -63,4 +63,9 @@ export class OfertaService {
 
     return this.ofertaRepo.remove(oferta)
   }
+
+
+  
+
+
 }

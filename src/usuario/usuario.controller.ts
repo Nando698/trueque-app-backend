@@ -6,11 +6,11 @@ import { UpdateUsuarioDto } from './DTOs/updateUsuarioDto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('usuarios')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('perfil')
   getPerfil(@Request() req) {
   return {
