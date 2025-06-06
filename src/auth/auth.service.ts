@@ -15,6 +15,7 @@ export class AuthService {
 
   if (user && await bcrypt.compare(password, user.password)) {
     return {
+      nombre: user.nombre,
       id: user.id,
       correo: user.correo,
       rol: user.rol, 
@@ -26,9 +27,10 @@ export class AuthService {
 
   async login(user: any) {
   console.log("user que llega a login:", user);
-  const payload = { correo: user.correo, sub: user.id, rol: user.rol };
+  const payload = { correo: user.correo, sub: user.id, rol: user.rol, nombre: user.nombre };
   console.log("payload que se firma:", payload);
   return {
-    access_token: this.jwtService.sign(payload)   
+    access_token: this.jwtService.sign(payload),
+    nombre : user.nombre   
 }
 }}

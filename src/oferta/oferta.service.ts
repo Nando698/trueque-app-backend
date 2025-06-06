@@ -97,34 +97,40 @@ export class OfertaService {
   
   
   
-  async remove(id: number) {
-    const oferta = await this.findOne(id)
-    if (!oferta) throw new NotFoundException('Oferta no encontrada')
-
-    return this.ofertaRepo.remove(oferta)
-  }
-
-
-  async buscarPersonalizado(filtro: { categoriaId?: number; texto?: string }) {
+  async buscarPersonalizado(filtro: { categoriaId?: string; texto?: string }) {
   const query = this.ofertaRepo.createQueryBuilder('oferta')
     .leftJoinAndSelect('oferta.usuario', 'usuario')
     .leftJoinAndSelect('oferta.categoria', 'categoria');
 
   if (filtro.categoriaId) {
-    
-    
-    query.andWhere('oferta.categoria = :categoriaId', { categoriaId: filtro.categoriaId });
+    const categoriaIds = filtro.categoriaId
+      .split(',')
+      .map(id => parseInt(id.trim()))
+      .filter(id => !isNaN(id)); // filtrás por si algún valor no era un número válido
+
+    if (categoriaIds.length > 0) {
+      query.andWhere('categoria.id IN (:...categoriaIds)', { categoriaIds });
+    }
   }
 
   if (filtro.texto) {
-    
     query.andWhere(
       '(LOWER(oferta.titulo) LIKE :texto OR LOWER(oferta.descripcion) LIKE :texto)',
-      { texto: `%${filtro.texto}%` },
+      { texto: `%${filtro.texto.toLowerCase()}%` },
     );
   }
 
   return query.getMany();
+}
+
+async remove(id: number): Promise<void> {
+  const oferta = await this.ofertaRepo.findOne({ where: { id } });
+
+  if (!oferta) {
+    throw new NotFoundException(`No se encontró una oferta con id ${id}`);
+  }
+
+  await this.ofertaRepo.remove(oferta);
 }
 
 

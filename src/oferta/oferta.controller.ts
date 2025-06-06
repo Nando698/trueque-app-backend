@@ -47,7 +47,7 @@ buscar(
   @Query('keywords') busqueda?: string,
 ) {
   return this.ofertaService.buscarPersonalizado({
-    categoriaId: categoriaId ? +categoriaId : undefined,
+    categoriaId: categoriaId ,
     texto: busqueda?.toLowerCase(),
   });
 }
