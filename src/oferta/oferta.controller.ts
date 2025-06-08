@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseInterceptors, UploadedFile, UploadedFiles, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, Req } from '@nestjs/common'
 import { OfertaService } from './oferta.service'
 import { CreateOfertaDto } from './DTOs/createOfertaDto'
 import { UpdateOfertaDto } from './DTOs/updateOfertaDto'
@@ -6,13 +6,17 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { extname, join } from 'path'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
+import { AuthRequest } from 'src/Request/Request'
+import { RolesGuard } from 'src/auth/guards/roles.guard'
 
-//@UseGuards(JwtAuthGuard)
+
+@UseGuards(JwtAuthGuard)
 @Controller('ofertas')
 export class OfertaController {
   constructor(private readonly ofertaService: OfertaService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('imagenes', 3, {
     storage: diskStorage({
       destination: join(process.cwd(), 'src/upload'),
@@ -24,20 +28,21 @@ export class OfertaController {
   }))
   create(
     @UploadedFiles() files: Express.Multer.File[],
-
-    @Body() dto: CreateOfertaDto) {
-
+    @Body() dto: CreateOfertaDto,
+    @Req() req: AuthRequest ) {
+    
     const imagenes = files.map(file => `http://localhost:3001/src/upload/${file.filename}`)
 
     const dtoConImagenes: CreateOfertaDto = {
       ...dto,
-      imagenes
+      imagenes,
+      usuario_id: req.user.id
     };
 
-
+    console.log("desde controller",req.user)
     return this.ofertaService.create(dtoConImagenes)
   }
-
+  
 
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +82,7 @@ buscar(
   update(@Param('id') id: string, @Body() dto: UpdateOfertaDto) {
     return this.ofertaService.update(+id, dto)
   }
-
+  @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ofertaService.remove(+id)

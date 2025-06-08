@@ -34,8 +34,9 @@ export class OfertaService {
       titulo: dto.titulo,
       descripcion: dto.descripcion,
       estado: dto.estado,
+      cambio: dto.cambio,    
       usuario,
-      categoria,    
+      categoria,
       fechaPublicacion: new Date().toISOString().split('T')[0],
       imagenes: dto.imagenes
       
@@ -45,12 +46,16 @@ export class OfertaService {
     return this.ofertaRepo.save(nuevaOferta)
   }
 
-  findAll() {
-    return this.ofertaRepo.find({
-      where: { estado: EstadoOferta.ACTIVA, },
-      relations: ['usuario', 'categoria'],
-    })
-  }
+  async findAll() {
+  const ofertas = await this.ofertaRepo.find({
+    where: { estado: EstadoOferta.ACTIVA },
+    relations: ['usuario', 'categoria'],
+  });
+
+  console.log("Ofertas encontradas:", ofertas);
+
+  return ofertas;
+}
   
   async buscarPorCategoria(categoriaId: number) {
     return this.ofertaRepo.find({

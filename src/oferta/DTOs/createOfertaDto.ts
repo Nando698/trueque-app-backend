@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEnum, IsInt, IsOptional, IsArray, ArrayNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString, IsEnum, IsInt, IsOptional, IsArray, isNotEmpty, IsIn } from 'class-validator'
 import { EstadoOferta } from '../entities/oferta.entity'
 import { Type } from 'class-transformer'
 
@@ -19,6 +19,11 @@ export class CreateOfertaDto {
   @IsNotEmpty()
   @IsEnum(EstadoOferta)
   estado: EstadoOferta
+
+  @IsNotEmpty()
+  @IsString()
+  cambio: string
+
 
    @Type(()=> Number)
   @IsNotEmpty()

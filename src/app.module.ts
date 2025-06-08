@@ -16,13 +16,14 @@ import { OfertaModule } from './oferta/oferta.module';
 import { OfertaService } from './oferta/oferta.service';
 import { OfertaController } from './oferta/oferta.controller';
 import { AuthModule } from './auth/auth.module';
+import { FavoritoModule } from './favorito/favorito.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, UsuarioModule, OfertaModule],
+      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule],
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({

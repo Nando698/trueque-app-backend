@@ -12,7 +12,7 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: 'tpProgramacion3',
-      signOptions: { expiresIn: '1m' },
+      signOptions: { expiresIn: '10m' },
     }),
   ],
   providers: [AuthService, JwtStrategy],

@@ -31,8 +31,11 @@ import {
     @Column({ type: 'text' })
     descripcion: string;
     
-   @Column({ type: 'text', array: true, nullable: true })
+    @Column({ type: 'text', array: true, nullable: true })
     imagenes: string[];
+
+    @Column({ nullable: true })
+    cambio: string;
 
     @ManyToOne(() => Categoria, categoria => categoria.ofertas)
     @JoinColumn({ name: 'categoria' })
