@@ -10,7 +10,7 @@ import { AuthRequest } from 'src/Request/Request'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 
 
-@UseGuards(JwtAuthGuard)
+//@UseGuards(JwtAuthGuard)
 @Controller('ofertas')
 export class OfertaController {
   constructor(private readonly ofertaService: OfertaService) { }
@@ -82,7 +82,7 @@ buscar(
   update(@Param('id') id: string, @Body() dto: UpdateOfertaDto) {
     return this.ofertaService.update(+id, dto)
   }
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ofertaService.remove(+id)
