@@ -47,16 +47,15 @@ export class FavoritoService {
 
   // (Opcional) Listar los favoritos de un usuario
   async listarFavoritosDeUsuario(usuarioId: number) {
-  const favoritos = await this.favoritoRepo.find({
-    where: {
-      usuario: { id: usuarioId },
-    },
-    relations: ['oferta'], // esto trae los datos de la oferta
-  });
-
-  // Solo devolvés las ofertas favoritas
-  return favoritos.map(f => f.oferta);
-}
+    const favoritos = await this.favoritoRepo.find({
+      where: {
+        usuario: { id: usuarioId },
+      },
+      relations: ['oferta', 'oferta.categoria'],
+    });
+  
+    return favoritos.map(f => f.oferta);
+  }
 
   // (Opcional) Eliminar un favorito
   async eliminarFavorito(usuarioId: number, ofertaId: number) {

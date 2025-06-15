@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Oferta } from './oferta/entities/oferta.entity';
+import { ReporteOferta } from './reporte/entities/reporte.entity';
 import { Categoria } from './categoria/entities/categoria.entity';
 import { Favorito } from './favorito/entities/favorito.entity';
 import { FavoritoService } from './favorito/favorito.service';
@@ -17,13 +18,14 @@ import { OfertaService } from './oferta/oferta.service';
 import { OfertaController } from './oferta/oferta.controller';
 import { AuthModule } from './auth/auth.module';
 import { FavoritoModule } from './favorito/favorito.module';
+import { ReporteOfertaModule } from './reporte/reporte.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule],
+      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule, ReporteOfertaModule],
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({
@@ -33,8 +35,8 @@ import { FavoritoModule } from './favorito/favorito.module';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Usuario, Oferta, Categoria, Favorito],
-        synchronize: true, // ⚠️ Solo en desarrollo
+        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta],
+        synchronize: true, 
       }),
     }),
 
@@ -42,7 +44,8 @@ import { FavoritoModule } from './favorito/favorito.module';
       Usuario,
       Oferta,
       Categoria,
-      Favorito
+      Favorito,
+      ReporteOferta
     ]),
 
     AuthModule,
