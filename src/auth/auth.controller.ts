@@ -19,5 +19,17 @@ export class AuthController {
   }
   
   
-  
+  @Post('recovery')
+  async solicitarCodigo(@Body('correo') correo: string) {
+    return this.authService.generarCodigoRecuperacion(correo);
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    @Body() body: { correo: string; codigo: string; nuevaPass: string },
+  ) {
+    const { correo, codigo, nuevaPass } = body;
+    return this.authService.cambiarPasswordConCodigo(correo, codigo, nuevaPass);
+  }
 }
+  

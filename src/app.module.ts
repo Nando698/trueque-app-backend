@@ -19,6 +19,7 @@ import { OfertaController } from './oferta/oferta.controller';
 import { AuthModule } from './auth/auth.module';
 import { FavoritoModule } from './favorito/favorito.module';
 import { ReporteOfertaModule } from './reporte/reporte.module';
+import { RecoveryCode } from './codigoRecuperacion/entities/codigo.entity';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { ReporteOfertaModule } from './reporte/reporte.module';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta],
+        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta, RecoveryCode],
         synchronize: true, 
       }),
     }),
@@ -45,7 +46,8 @@ import { ReporteOfertaModule } from './reporte/reporte.module';
       Oferta,
       Categoria,
       Favorito,
-      ReporteOferta
+      ReporteOferta,
+      RecoveryCode
     ]),
 
     AuthModule,

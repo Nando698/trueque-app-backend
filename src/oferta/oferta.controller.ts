@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, Req } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, Req, Patch } from '@nestjs/common'
 import { OfertaService } from './oferta.service'
 import { CreateOfertaDto } from './DTOs/createOfertaDto'
 import { UpdateOfertaDto } from './DTOs/updateOfertaDto'
@@ -8,9 +8,10 @@ import { extname, join } from 'path'
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { AuthRequest } from 'src/Request/Request'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
+import { EstadoOferta } from './entities/oferta.entity'
 
 
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('ofertas')
 export class OfertaController {
   constructor(private readonly ofertaService: OfertaService) { }
@@ -61,9 +62,10 @@ buscar(
   findAll(
     @Query('categoria_id') categoriaId?: string,
     @Query('usuario_id') usuarioId?: string,
+    @Query('estado') estado?: string,
   ) {
     if (usuarioId) {
-      return this.ofertaService.buscarPorUsuario(+usuarioId)
+      return this.ofertaService.buscarPorUsuario(+usuarioId, estado)
     }
 
     if (categoriaId) {
@@ -88,6 +90,23 @@ buscar(
     return this.ofertaService.remove(+id)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/pausar')
+async pausar(@Param('id') id: string, @Req() req: AuthRequest) {
+  return this.ofertaService.cambiarEstadoSiAutorizado(+id, EstadoOferta.PAUSADA, req.user.id, req.user.rol);
+}
+
+@UseGuards(JwtAuthGuard)
+@Patch(':id/finalizar')
+async finalizar(@Param('id') id: string, @Req() req: AuthRequest) {
+  return this.ofertaService.cambiarEstadoSiAutorizado(+id, EstadoOferta.FINALIZADA, req.user.id, req.user.rol);
+}
+
+@UseGuards(JwtAuthGuard)
+@Patch(':id/despausar')
+async despausar(@Param('id') id: string, @Req() req: AuthRequest) {
+return this.ofertaService.cambiarEstadoSiAutorizado(+id, EstadoOferta.ACTIVA, req.user.id, req.user.rol);
+}
 
 
 

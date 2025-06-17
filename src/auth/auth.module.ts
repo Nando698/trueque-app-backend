@@ -5,6 +5,9 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsuarioModule } from '../usuario/usuario.module';
 import { JwtStrategy } from './jwt.strategy';
+import { RecoveryCode } from '../codigoRecuperacion/entities/codigo.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 
 @Module({
   imports: [
@@ -12,11 +15,13 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: 'tpProgramacion3',
-      signOptions: { expiresIn: '10m' },
+      signOptions: { expiresIn: '1000m' },
     }),
+    TypeOrmModule.forFeature([RecoveryCode]) 
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })
 export class AuthModule {}
+

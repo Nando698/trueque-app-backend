@@ -59,6 +59,11 @@ export class UsuarioService {
     return { mensaje: `Usuario ${id} marcado como INACTIVO` }
   }
 
+  async removePermant(id: number) {
+    await this.usuarioRepo.delete(id)
+    return { mensaje: `Usuario ${id} eliminado` }
+  }
+
 
   async activar(id: number) {
     await this.usuarioRepo.update(id, { estado: EstadoUsuario.ACTIVO })
@@ -68,6 +73,14 @@ export class UsuarioService {
   async findByEmail(correo: string): Promise<Usuario | null> {
     return this.usuarioRepo.findOne({ where: { correo } });  
 
+  }
+
+  async actualizarPassword(correo: string, nuevaPasswordHash: string) {
+    const user = await this.usuarioRepo.findOneBy({ correo });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+  
+    user.password = nuevaPasswordHash;
+    return this.usuarioRepo.save(user);
   }
 }
 

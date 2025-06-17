@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
 import { EstadoOferta, Oferta } from './entities/oferta.entity'
@@ -67,14 +67,19 @@ export class OfertaService {
     })
   }
 
-  async buscarPorUsuario(usuarioId: number) {
+  async buscarPorUsuario(usuarioId: number, estado?: string) {
+    const filtros: any = {
+      usuario: { id: usuarioId },
+    };
+  
+    if (estado) {
+      filtros.estado = estado;
+    }
+  
     return this.ofertaRepo.find({
-      where: {
-        usuario: { id: usuarioId },
-        estado: EstadoOferta.ACTIVA,
-      },
+      where: filtros,
       relations: ['usuario', 'categoria'],
-    })
+    });
   }
   
 
@@ -137,6 +142,35 @@ async remove(id: number): Promise<void> {
 
   await this.ofertaRepo.remove(oferta);
 }
+
+async cambiarEstado(id: number, nuevoEstado: EstadoOferta): Promise<Oferta> {
+  const oferta = await this.ofertaRepo.findOne({ where: { id } });
+  if (!oferta) throw new NotFoundException('Oferta no encontrada');
+
+  oferta.estado = nuevoEstado;
+  return await this.ofertaRepo.save(oferta);
+}
+
+async cambiarEstadoSiAutorizado(id: number, nuevoEstado: EstadoOferta, usuarioId: number, rol: string): Promise<Oferta> {
+  const oferta = await this.ofertaRepo.findOne({
+    where: { id },
+    relations: ['usuario'],
+  });
+
+  if (!oferta) throw new NotFoundException('Oferta no encontrada');
+
+  const esAdmin = rol === 'ADMIN';
+  const esPropietario = oferta.usuario.id === usuarioId;
+
+  if (!esAdmin && !esPropietario) {
+    throw new ForbiddenException('No estás autorizado para modificar esta oferta');
+  }
+
+  oferta.estado = nuevoEstado;
+  return await this.ofertaRepo.save(oferta);
+}
+
+
 
 
 
