@@ -32,7 +32,7 @@ export class CategoriaController {
     try {
       return await this.categoriaService.remove(+id);
     } catch (error) {
-      console.error('Error al eliminar categoría:', error);
+      
       throw new BadRequestException('No se puede eliminar la categoría porque tiene ofertas asociadas.');
     }
   }
