@@ -1,0 +1,25 @@
+@startuml
+
+title Diagrama general
+
+actor Usuario
+
+package "Frontend (Next.js)" {
+  [Capa de presentacion]
+}
+
+package "Backend (NestJS)" {
+  rectangle "Capa de Controller" as C1
+  rectangle "Capa de Servicio" as C2
+  rectangle "Capa de Repositorio" as C3
+}
+
+database "Base de Datos\n(PostgreSQL)" as DB
+
+Usuario --> [Capa de presentacion]
+[Capa de presentacion] -right-> C1 : Solicitudes HTTP (REST)
+C1 -down-> C2 : Lógica de negocio
+C2 -down-> C3 : Acceso a datos
+C3 -right-> DB : Consultas SQL / ORM
+
+@enduml

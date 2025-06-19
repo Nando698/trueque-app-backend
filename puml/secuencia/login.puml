@@ -1,0 +1,31 @@
+@startuml Login
+actor Usuario
+boundary Frontend
+control AuthConnect
+boundary BackendController
+control AuthService
+entity UsuarioService
+entity JwtService
+
+Usuario -> Frontend: Ingresa correo y contraseña
+Frontend -> AuthConnect: loguearse(correo, password)
+AuthConnect -> BackendController: POST /auth/login
+BackendController -> AuthService: validateUser(correo, password)
+AuthService -> UsuarioService: findByEmail(correo)
+UsuarioService --> AuthService: Usuario
+AuthService -> AuthService: bcrypt.compare(password, usuario.password)
+alt Coincide
+  AuthService -> JwtService: sign({correo, sub, rol, nombre})
+  JwtService --> AuthService: token
+  AuthService -> BackendController: { access_token, nombre }
+  BackendController --> AuthConnect: Response
+  AuthConnect -> Frontend: ok=true, token
+  Frontend -> Frontend: localStorage.set(token, nombre)
+  Frontend -> Usuario: Redirige a inicio
+else No coincide
+  AuthService -> BackendController: UnauthorizedException
+  BackendController --> AuthConnect: Error
+  AuthConnect -> Frontend: ok=false, mensaje
+  Frontend -> Usuario: Muestra error
+end
+@enduml

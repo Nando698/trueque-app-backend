@@ -82,5 +82,21 @@ export class UsuarioService {
     user.password = nuevaPasswordHash;
     return this.usuarioRepo.save(user);
   }
+
+  async obtenerPaginado(page: number, limit: number): Promise<{ data: Usuario[]; total: number; page: number }> {
+    const [data, total] = await this.usuarioRepo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'ASC' }, // opcional
+    });
+
+    console.log({ data, total, page });
+  
+    return { data, total, page };
+  }
+
+
+
+
 }
 

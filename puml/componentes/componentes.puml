@@ -1,0 +1,40 @@
+@startuml 
+!theme amiga
+title Diagrama de Componentes
+
+package "Módulo Auth" {
+  [AuthController] --> [AuthService]
+  [AuthService] --> [JwtService]
+  [AuthService] --> [UsuarioService]
+}
+
+package "Módulo Usuario" {
+  [UsuarioController] --> [UsuarioService]
+  [UsuarioService] --> [UsuarioRepository]
+}
+
+package "Módulo Oferta" {
+  [OfertaController] --> [OfertaService]
+  [OfertaService] --> [OfertaRepository]
+  [OfertaService] --> [UsuarioService]
+  [OfertaService] --> [CategoriaService]
+  [OfertaService] --> [EtiquetaService]
+}
+
+package "Módulo Categoría" {
+  [CategoriaController] --> [CategoriaService]
+  [CategoriaService] --> [CategoriaRepository]
+}
+
+package "Módulo Etiqueta" {
+  [EtiquetaController] --> [EtiquetaService]
+  [EtiquetaService] --> [EtiquetaRepository]
+}
+
+package "Módulo Código Recuperación" {
+  [CodigoController] --> [AuthService]
+  [AuthService] --> [RecoveryCodeRepository]
+}
+
+
+@enduml

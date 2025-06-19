@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Param, Put, Delete, Patch, UseGuards, Request, Req } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Put, Delete, Patch, UseGuards, Request, Req, Query } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { Usuario } from './entities/usuario.entity';
 import { CreateUsuarioDto } from './DTOs/createUsuarioDto';
@@ -66,6 +66,17 @@ export class UsuarioController {
   activar(@Param('id') id: string) {
     return this.usuarioService.activar(+id)
   }
+
+  
+  
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('paginado')
+async obtenerPaginado(
+  @Query('page') page = 1,
+  @Query('limit') limit = 10,
+): Promise<{ data: Usuario[]; total: number; page: number }> {
+  return this.usuarioService.obtenerPaginado(+page, +limit);
+}
 
 
 

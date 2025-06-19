@@ -1,0 +1,18 @@
+@startuml CrearOferta
+actor Usuario
+participant Frontend
+participant "OfertaController" as Controller
+participant "OfertaService" as Service
+participant "OfertaRepository" as Repo
+
+
+
+Usuario -> Frontend : Completa formulario (título, descripción, imágenes...)
+Frontend -> Controller : POST /ofertas con datos y archivos
+Controller -> Service : crearOferta(dto, archivos)
+Service -> Repo : ofertaRepo.save(oferta)
+Repo --> Service : nuevaOferta
+Service --> Controller : nuevaOferta
+Controller --> Frontend : devuelve 201
+Frontend --> Usuario : Muestra confirmación / redirige
+@enduml
