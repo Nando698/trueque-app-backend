@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Categoria } from './entities/categoria.entity'
@@ -31,8 +31,22 @@ export class CategoriaService {
   }
 
   async remove(id: number) {
-    const categoria = await this.findOne(id)
-    if (!categoria) throw new NotFoundException('Categoría no encontrada')
-    return this.categoriaRepo.remove(categoria)
+    const categoria = await this.findOne(id);
+    if (!categoria) throw new NotFoundException('Categoría no encontrada');
+  
+    try {
+      return await this.categoriaRepo.remove(categoria);
+    } catch (error: any) {
+      if (error?.code === '23503') {
+        // Error de llave foránea: la categoría está en uso
+        throw new BadRequestException('No se puede eliminar la categoría porque tiene ofertas asociadas.');
+      }
+      // Otros errores inesperados
+      console.error('Error inesperado al eliminar categoría:', error);
+      throw new InternalServerErrorException('Error inesperado al eliminar la categoría.');
+    }
   }
+  
+
+
 }

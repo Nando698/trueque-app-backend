@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
+import { Controller, Get, Post, Body, Param, Delete, Put, BadRequestException } from '@nestjs/common'
 import { CategoriaService } from './categoria.service'
 import { UpdateCategoriaDto } from './DTOs/updateCatDto'
 import { CreateCategoriaDto } from './DTOs/createCatDto'
@@ -28,7 +28,12 @@ export class CategoriaController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriaService.remove(+id)
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.categoriaService.remove(+id);
+    } catch (error) {
+      console.error('Error al eliminar categoría:', error);
+      throw new BadRequestException('No se puede eliminar la categoría porque tiene ofertas asociadas.');
+    }
   }
 }
