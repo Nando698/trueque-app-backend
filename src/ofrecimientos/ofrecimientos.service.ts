@@ -9,8 +9,6 @@ import { EstadoOfrecimiento, Ofrecimiento } from './entities/ofrecimiento.entity
 import { CreateOfrecimientoDto } from './dto/create-ofrecimiento.dto';
 import { EstadoOferta, Oferta } from '../oferta/entities/oferta.entity';
 import { Usuario } from '../usuario/entities/usuario.entity';
-import { Categoria } from 'src/categoria/entities/categoria.entity';
-
 @Injectable()
 export class OfrecimientosService {
   constructor(
