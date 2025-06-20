@@ -33,11 +33,16 @@ import {
     @CreateDateColumn()
     fecha: Date;
   
-    @ManyToOne(() => Usuario, (usuario) => usuario.ofrecimientos, { eager: true })
+    @ManyToOne(() => Usuario, (usuario) => usuario.ofrecimientos, {
+      onDelete: 'CASCADE',
+    })
     @JoinColumn({ name: 'usuario_id' })
     usuario: Usuario;
   
-    @ManyToOne(() => Oferta, (oferta) => oferta.ofrecimientos, { eager: true })
+    @ManyToOne(() => Oferta, (oferta) => oferta.ofrecimientos, {
+      eager: true,
+      onDelete: 'CASCADE',
+    })
     @JoinColumn({ name: 'oferta_id' })
     oferta: Oferta;
   }

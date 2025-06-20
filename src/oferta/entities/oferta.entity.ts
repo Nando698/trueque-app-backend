@@ -20,7 +20,9 @@ export class Oferta {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Usuario, usuario => usuario.ofertas)
+  @ManyToOne(() => Usuario, (usuario) => usuario.ofertas, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'usuario_id' })
   usuario: Usuario;
 
@@ -54,7 +56,9 @@ export class Oferta {
   favoritos: Favorito[];
 
 
-  @OneToMany(() => Ofrecimiento, (ofrecimiento) => ofrecimiento.oferta)
+  @OneToMany(() => Ofrecimiento, (ofrecimiento) => ofrecimiento.oferta, {
+    cascade: true,
+  })
   ofrecimientos: Ofrecimiento[];
 
 }
