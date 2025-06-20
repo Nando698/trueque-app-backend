@@ -6,6 +6,9 @@ import { Favorito } from './entities/favorito.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Oferta } from 'src/oferta/entities/oferta.entity';
 
+/**
+ * Servicio para gestionar favoritos de ofertas por parte de los usuarios.
+ */
 @Injectable()
 export class FavoritoService {
   constructor(
@@ -19,7 +22,14 @@ export class FavoritoService {
     private ofertaRepo: Repository<Oferta>,
   ) {}
 
-  // Agrega una oferta a los favoritos del usuario
+  /**
+   * Agrega una oferta a los favoritos del usuario si aún no está presente.
+   * 
+   * @param usuarioId - ID del usuario que agrega la oferta a favoritos.
+   * @param ofertaId - ID de la oferta que se desea agregar.
+   * @returns Mensaje indicando el resultado de la operación.
+   * @throws NotFoundException si el usuario o la oferta no existen.
+   */
   async agregarFavorito(usuarioId: number, ofertaId: number) {
     const usuario = await this.usuarioRepo.findOneBy({ id: usuarioId });
     const oferta = await this.ofertaRepo.findOneBy({ id: ofertaId });
@@ -45,7 +55,12 @@ export class FavoritoService {
     return { message: 'Agregado a favoritos' };
   }
 
-  // (Opcional) Listar los favoritos de un usuario
+  /**
+   * Lista todas las ofertas marcadas como favoritas por un usuario.
+   * 
+   * @param usuarioId - ID del usuario.
+   * @returns Array de objetos `Oferta` que son favoritas del usuario.
+   */
   async listarFavoritosDeUsuario(usuarioId: number) {
     const favoritos = await this.favoritoRepo.find({
       where: {
@@ -53,11 +68,18 @@ export class FavoritoService {
       },
       relations: ['oferta', 'oferta.categoria'],
     });
-  
+
     return favoritos.map(f => f.oferta);
   }
 
-  // (Opcional) Eliminar un favorito
+  /**
+   * Elimina una oferta de los favoritos del usuario.
+   * 
+   * @param usuarioId - ID del usuario.
+   * @param ofertaId - ID de la oferta a eliminar de favoritos.
+   * @returns Mensaje indicando que fue eliminada.
+   * @throws NotFoundException si el favorito no existe.
+   */
   async eliminarFavorito(usuarioId: number, ofertaId: number) {
     const favorito = await this.favoritoRepo.findOne({
       where: {

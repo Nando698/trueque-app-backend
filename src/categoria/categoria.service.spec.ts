@@ -45,13 +45,13 @@ describe('CategoriaService', () => {
     expect(result).toEqual(mockCategoria);
   });
 
-  it('findAll() debería devolver todas las categorías', async () => {
+  it('findAll() deberia devolver todas las categorias', async () => {
     const result = await service.findAll();
     expect(repo.find).toHaveBeenCalled();
     expect(result).toEqual([mockCategoria]);
   });
 
-  it('findOne() debería devolver una categoría por id', async () => {
+  it('findOne() deberia devolver una categoria por id', async () => {
     const result = await service.findOne(1);
     expect(repo.findOneBy).toHaveBeenCalledWith({ id: 1 });
     expect(result).toEqual(mockCategoria);

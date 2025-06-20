@@ -20,13 +20,15 @@ import { AuthModule } from './auth/auth.module';
 import { FavoritoModule } from './favorito/favorito.module';
 import { ReporteOfertaModule } from './reporte/reporte.module';
 import { RecoveryCode } from './codigoRecuperacion/entities/codigo.entity';
+import { OfrecimientosModule } from './ofrecimientos/ofrecimientos.module';
+import { Ofrecimiento } from './ofrecimientos/entities/ofrecimiento.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule, ReporteOfertaModule],
+      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule, ReporteOfertaModule, OfrecimientosModule],
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({
@@ -36,7 +38,7 @@ import { RecoveryCode } from './codigoRecuperacion/entities/codigo.entity';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta, RecoveryCode],
+        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta, RecoveryCode, Ofrecimiento],
         synchronize: true, 
       }),
     }),
@@ -47,10 +49,13 @@ import { RecoveryCode } from './codigoRecuperacion/entities/codigo.entity';
       Categoria,
       Favorito,
       ReporteOferta,
-      RecoveryCode
+      RecoveryCode,
+      Ofrecimiento
     ]),
 
     AuthModule,
+
+    OfrecimientosModule,
 
     
   ],

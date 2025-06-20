@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } f
 import { Oferta } from '../../oferta/entities/oferta.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';
 import { Exclude } from 'class-transformer';
+import { Ofrecimiento } from 'src/ofrecimientos/entities/ofrecimiento.entity';
 
 export enum RolUsuario {
   ADMIN = 'ADMIN',
@@ -43,4 +44,7 @@ export class Usuario {
 
   @OneToMany(() => Favorito, fav => fav.usuario)
   favoritos: Favorito[];
+
+  @OneToMany(() => Ofrecimiento, (ofrecimiento) => ofrecimiento.usuario)
+ofrecimientos: Ofrecimiento[];
 }

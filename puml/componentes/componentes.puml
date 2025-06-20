@@ -1,40 +1,69 @@
-@startuml 
+@startuml
 !theme amiga
-title Diagrama de Componentes
+title Diagrama de Componentes – Backend
 
-package "Módulo Auth" {
-  [AuthController] --> [AuthService]
-  [AuthService] --> [JwtService]
-  [AuthService] --> [UsuarioService]
+' Módulo Auth
+package "AuthModule" {
+  [AuthController]         <<Controller>>
+  [AuthService]            <<Service>>
+  [JwtService]             <<Service>>
+  [RecoveryCodeRepository] <<Repository>>
+  [UsuarioService]         <<Service>>
+
+  AuthController --> AuthService
+  AuthService    --> JwtService
+  AuthService    --> RecoveryCodeRepository
+  AuthService    --> UsuarioService
 }
 
-package "Módulo Usuario" {
-  [UsuarioController] --> [UsuarioService]
-  [UsuarioService] --> [UsuarioRepository]
+' Módulo Usuario
+package "UsuarioModule" {
+  [UsuarioController] <<Controller>>
+  [UsuarioService]    <<Service>>
+  [UsuarioRepository] <<Repository>>
+
+  UsuarioController --> UsuarioService
+  UsuarioService    --> UsuarioRepository
 }
 
-package "Módulo Oferta" {
-  [OfertaController] --> [OfertaService]
-  [OfertaService] --> [OfertaRepository]
-  [OfertaService] --> [UsuarioService]
-  [OfertaService] --> [CategoriaService]
-  [OfertaService] --> [EtiquetaService]
+' Módulo Categoría
+package "CategoriaModule" {
+  [CategoriaController] <<Controller>>
+  [CategoriaService]    <<Service>>
+  [CategoriaRepository] <<Repository>>
+
+  CategoriaController --> CategoriaService
+  CategoriaService    --> CategoriaRepository
 }
 
-package "Módulo Categoría" {
-  [CategoriaController] --> [CategoriaService]
-  [CategoriaService] --> [CategoriaRepository]
+' Módulo Oferta
+package "OfertaModule" {
+  [OfertaController] <<Controller>>
+  [OfertaService]    <<Service>>
+  [OfertaRepository] <<Repository>>
+  [UsuarioRepository] <<Repository>>
+  [CategoriaRepository] <<Repository>>
+
+  OfertaController --> OfertaService
+  OfertaService    --> OfertaRepository
+  OfertaService    --> UsuarioRepository
+  OfertaService    --> CategoriaRepository
 }
 
-package "Módulo Etiqueta" {
-  [EtiquetaController] --> [EtiquetaService]
-  [EtiquetaService] --> [EtiquetaRepository]
+' Módulo Favorito
+package "FavoritoModule" {
+  [FavoritoController] <<Controller>>
+  [FavoritoService]    <<Service>>
+  [FavoritoRepository] <<Repository>>
+  [UsuarioRepository]  <<Repository>>
+  [OfertaRepository]   <<Repository>>
+
+  FavoritoController --> FavoritoService
+  FavoritoService    --> FavoritoRepository
+  FavoritoService    --> UsuarioRepository
+  FavoritoService    --> OfertaRepository
 }
 
-package "Módulo Código Recuperación" {
-  [CodigoController] --> [AuthService]
-  [AuthService] --> [RecoveryCodeRepository]
-}
 
 
 @enduml
