@@ -39,7 +39,7 @@ SwaggerModule.setup('api', app, documentFactory);
 
 
   
-  await app.listen(process.env.PORT ?? 4000);
+  await app.listen(process.env.PORT ?? 3001);
   console.log(process.env.PORT);
 }
 bootstrap();
