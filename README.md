@@ -103,3 +103,4 @@ npm run start
 
 ---
 
+MAS INFORMACION EN LA DOCUMENTACION: https://nando698.github.io/trueque-app-backend/index.html
