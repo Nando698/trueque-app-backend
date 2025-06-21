@@ -1,0 +1,125 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+
+enum RolUsuario {
+  ADMIN
+  NORMAL
+}
+enum EstadoUsuario {
+  ACTIVO
+  INACTIVO
+}
+enum EstadoOferta {
+  ACTIVA
+  PAUSADA
+  FINALIZADA
+}
+enum EstadoOfrecimiento {
+  PENDIENTE
+  ACEPTADO
+  RECHAZADO
+}
+
+
+class Usuario {
+  +id: number
+  +nombre: string
+  +correo: string
+  -password: string
+  +rol: RolUsuario
+  +estado: EstadoUsuario
+  +fechaCreacion: Date
+
+  +crear()
+  +obtenerTodos()
+  +obtenerUno()
+  +actualizar()
+  +remove()
+  +removePermant()
+  +activar()
+  +findByEmail()
+  +actualizarPassword()
+  +obtenerPaginado()
+}
+
+class Categoria {
+  +id: number
+  +nombre: string
+
+  +create()
+  +findAll()
+  +findOne()
+  +update()
+  +remove()
+}
+
+class Oferta {
+  +id: number
+  +titulo: string
+  +descripcion: string
+  +imagenes: string[]
+  +cambio: string
+  +fechaPublicacion: Date
+  +estado: EstadoOferta
+
+  +create()
+  +findAll()
+  +findOne()
+  +update()
+  +remove()
+  +buscarPorCategoria()
+  +buscarPorUsuario()
+  +buscarPersonalizado()
+  +cambiarEstadoSiAutorizado()
+}
+
+class Favorito {
+  +id: number
+  +fechaAgregado: Date
+
+  +agregarFavorito()
+  +listarFavoritosDeUsuario()
+  +eliminarFavorito()
+}
+
+class Ofrecimiento {
+  +id: number
+  +mensaje: string
+  +estado: EstadoOfrecimiento
+  +fecha: Date
+
+  +crear()
+  +obtenerRecibidos()
+  +obtenerEnviados()
+  +aceptar()
+  +rechazar()
+}
+
+class ReporteOferta {
+  +id: number
+  +motivo: string
+  +fechaReporte: Date
+
+  +crear()
+  +findAll()
+  +findByOferta()
+}
+
+
+Usuario       "1" -- "0..*" Oferta        : crea >
+Categoria     "1" -- "0..*" Oferta        : contiene >
+Usuario       "1" -- "0..*" Favorito       : marca >
+Oferta        "1" -- "0..*" Favorito       : es marcado >
+Usuario       "1" -- "0..*" Ofrecimiento   : envía >
+Oferta        "1" -- "0..*" Ofrecimiento   : recibe >
+Usuario       "1" -- "0..*" ReporteOferta   : reporta >
+Oferta        "1" -- "0..*" ReporteOferta   : es reportada >
+
+
+Usuario       ..> RolUsuario          : usa
+Usuario       ..> EstadoUsuario       : usa
+Oferta        ..> EstadoOferta        : usa
+Ofrecimiento  ..> EstadoOfrecimiento  : usa
+
+@enduml
