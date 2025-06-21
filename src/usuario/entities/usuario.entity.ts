@@ -1,4 +1,3 @@
-// src/usuario/usuario.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 import { Oferta } from '../../oferta/entities/oferta.entity';
 import { Favorito } from '../../favorito/entities/favorito.entity';

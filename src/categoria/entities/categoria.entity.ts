@@ -1,4 +1,4 @@
-// src/categoria/categoria.entity.ts
+
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Oferta } from '../../oferta/entities/oferta.entity';
 

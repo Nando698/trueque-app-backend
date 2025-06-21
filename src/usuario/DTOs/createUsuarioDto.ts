@@ -1,4 +1,4 @@
-// usuario/dto/create-usuario.dto.ts
+
 import { IsString, IsEmail, IsEnum, isEnum } from 'class-validator';
 import { RolUsuario, EstadoUsuario } from '../entities/usuario.entity';
 
