@@ -22,13 +22,23 @@ import { ReporteOfertaModule } from './reporte/reporte.module';
 import { RecoveryCode } from './codigoRecuperacion/entities/codigo.entity';
 import { OfrecimientosModule } from './ofrecimientos/ofrecimientos.module';
 import { Ofrecimiento } from './ofrecimientos/entities/ofrecimiento.entity';
+import { ContactoModule } from './contacto/contacto.module';
+import { Contacto } from './contacto/entities/contacto.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, UsuarioModule, OfertaModule, FavoritoModule, ReporteOfertaModule, OfrecimientosModule],
+      imports: [
+        ConfigModule,
+        UsuarioModule,
+        OfertaModule,
+        FavoritoModule,
+        ReporteOfertaModule,
+        OfrecimientosModule,
+        ContactoModule,
+      ],
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({
@@ -38,8 +48,17 @@ import { Ofrecimiento } from './ofrecimientos/entities/ofrecimiento.entity';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Usuario, Oferta, Categoria, Favorito, ReporteOferta, RecoveryCode, Ofrecimiento],
-        synchronize: true, 
+        entities: [
+          Usuario,
+          Oferta,
+          Categoria,
+          Favorito,
+          ReporteOferta,
+          RecoveryCode,
+          Ofrecimiento,
+          Contacto,
+        ],
+        synchronize: true,
       }),
     }),
 
@@ -50,16 +69,20 @@ import { Ofrecimiento } from './ofrecimientos/entities/ofrecimiento.entity';
       Favorito,
       ReporteOferta,
       RecoveryCode,
-      Ofrecimiento
+      Ofrecimiento,
+      Contacto,
     ]),
 
     AuthModule,
 
     OfrecimientosModule,
-
-    
   ],
-  providers: [AppService, FavoritoService,  CategoriaService, OfertaService],
-  controllers: [AppController, FavoritoController, CategoriaController, OfertaController],
+  providers: [AppService, FavoritoService, CategoriaService, OfertaService],
+  controllers: [
+    AppController,
+    FavoritoController,
+    CategoriaController,
+    OfertaController,
+  ],
 })
 export class AppModule {}
