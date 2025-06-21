@@ -2,21 +2,7 @@
 
 **Aplicación de trueque** construida con **Next.js** (frontend) y **NestJS** (backend).
 
----
 
-## 📋 Tabla de Contenidos
-
-1. [Requisitos](#requisitos)
-2. [Instalación](#instalación)
-3. [Variables de Entorno](#variables-de-entorno)
-4. [Ejecutar Backend](#ejecutar-backend)
-5. [Ejecutar Frontend](#ejecutar-frontend)
-6. [Uso de la Aplicación](#uso-de-la-aplicación)
-7. [Endpoints Principales (API)](#endpoints-principales-api)
-8. [Scripts Útiles](#scripts-útiles)
-9. [Licencia](#licencia)
-
----
 
 ## 🚀 Requisitos
 
