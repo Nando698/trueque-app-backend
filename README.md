@@ -104,3 +104,33 @@ npm run start
 ---
 
 MAS INFORMACION EN LA DOCUMENTACION: https://nando698.github.io/trueque-app-backend/index.html
+
+
+
+
+## Glosario - Términos Funcionales
+
+| Término                | Definición |
+|------------------------|-----------|
+| **Usuario**            | Persona registrada en la plataforma que puede publicar ofertas y realizar contraofertas. |
+| **Admin**              | Persona registrada con los mismos permisos que un usuario, mas una serie de permision orientados a la moderacion |
+| **Oferta**             | Publicación creada por un usuario para ofrecer un producto o servicio en el sistema de trueque. |
+| **Estado de Oferta**   | Estado actual de una oferta: puede ser `ACTIVA`, `PAUSADA` o `FINALIZADA`. |
+| **Ofrecimiento**       | Contraoferta que un usuario envía sobre una oferta existente. Contiene un mensaje y puede ser aceptada o rechazada. |
+| **Estado de Ofrecimiento** | Estado actual de un ofrecimiento: puede ser `PENDIENTE`, `ACEPTADO` o `RECHAZADO`. |
+| **Favorito**           | Oferta marcada por un usuario para poder acceder rápidamente a ella desde su perfil. |
+| **Categoría**          | Clasificación asignada a una oferta (ej: Tecnología, Hogar, Servicios). |
+
+
+## Glosario - Términos Técnicos
+
+| Término                | Definición |
+|------------------------|-----------|
+| **Token**          | Token usado para autenticar usuarios en las distintas operaciones del sistema. |
+| **Backend**            | Aplicacion que se encarga de gestionar, manipular y servir los recursos que necesita el Frontend |
+| **Frontend**           | Interfaz de usuario que permite interactuar con la plataforma.  |
+| **DTO** | Objeto usado para transferir datos entre capas de la aplicación |
+| **AuthGuard**          | Mecanismo de protección en el backend que valida si un usuario tiene autorización para acceder a ciertos recursos |
+| **RecoveryCode**       | Código temporal generado para recuperar la contraseña de un usuario registrado. |
+
+

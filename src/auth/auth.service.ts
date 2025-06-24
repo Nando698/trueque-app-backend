@@ -73,6 +73,7 @@ export class AuthService {
     console.log(`Código para ${correo}: ${codigo}`);
 
     const recoveryCode = this.recoveryRepo.create({ correo, codigo });
+    
     await this.recoveryRepo.save(recoveryCode);
   }
 
